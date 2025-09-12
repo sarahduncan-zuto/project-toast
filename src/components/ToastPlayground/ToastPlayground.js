@@ -13,7 +13,10 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
 
-  useEscapeKey(() => setMessages([]));
+  const callback = React.useCallback(() => {
+    setMessages([]);
+  }, [setMessages]);
+  useEscapeKey(() => callback());
 
   const handleVariantChange = (e) => {
     setVariant(e.target.value);
