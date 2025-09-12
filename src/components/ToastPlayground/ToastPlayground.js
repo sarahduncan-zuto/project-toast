@@ -8,9 +8,23 @@ import { useContext } from "react";
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const { messages, addMessage } = useContext(ToastContext);
+  const { messages, addMessage, setMessages } = useContext(ToastContext);
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setMessages([]);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setMessages]);
 
   const handleVariantChange = (e) => {
     setVariant(e.target.value);
@@ -64,7 +78,7 @@ function ToastPlayground() {
           <div className={styles.label}>Variant</div>
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
             {VARIANT_OPTIONS.map((option) => (
-              <label htmlFor={`variant-${option}`}>
+              <label htmlFor={`variant-${option}`} key={option}>
                 <input
                   id={`variant-${option}`}
                   type="radio"
@@ -91,5 +105,4 @@ function ToastPlayground() {
     </div>
   );
 }
-
 export default ToastPlayground;
