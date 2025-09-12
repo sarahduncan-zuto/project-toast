@@ -2,13 +2,15 @@ import React from "react";
 import Button from "../Button";
 import styles from "./ToastPlayground.module.css";
 import ToastShelf from "../ToastShelf";
+import ToastContext from "../ToastProvider/ToastProvider";
+import { useContext } from "react";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
+  const { messages, addMessage } = useContext(ToastContext);
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-  const [messages, setMessages] = React.useState([]);
 
   const handleVariantChange = (e) => {
     setVariant(e.target.value);
@@ -20,29 +22,15 @@ function ToastPlayground() {
 
   const handleSubmitMessage = (e) => {
     e.preventDefault();
-    const existingMessages = [...messages];
     const newMessage = {
       id: crypto.randomUUID(),
       message: message,
       variant: variant,
     };
-    existingMessages.push(newMessage);
-    setMessages(existingMessages);
+    addMessage(newMessage);
     setMessage("");
     setVariant(VARIANT_OPTIONS[0]);
   };
-
-  const closeToast = (id) => {
-    const existingMessages = [...messages];
-    const filteredMessages = existingMessages.filter(
-      (message) => message.id !== id
-    );
-    setMessages(filteredMessages);
-  };
-
-  const messagesWithCloseModal = messages.map((message) => {
-    return { ...message, closeModal: () => closeToast(message.id) };
-  });
 
   return (
     <div className={styles.wrapper}>
@@ -99,7 +87,7 @@ function ToastPlayground() {
           </div>
         </div>
       </form>
-      <ToastShelf messages={messagesWithCloseModal} />
+      <ToastShelf messages={messages} />
     </div>
   );
 }

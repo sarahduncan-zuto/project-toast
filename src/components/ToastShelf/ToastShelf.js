@@ -1,5 +1,3 @@
-import React from "react";
-
 import Toast from "../Toast";
 import styles from "./ToastShelf.module.css";
 
