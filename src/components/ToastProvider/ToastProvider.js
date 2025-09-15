@@ -1,4 +1,5 @@
 import React from "react";
+import useEscapeKey from "../../hooks/UseKey";
 
 const ToastContext = React.createContext({
   messages: [],
@@ -9,6 +10,12 @@ const ToastContext = React.createContext({
 
 export function ToastProvider({ children }) {
   const [messages, setMessages] = React.useState([]);
+
+  const callback = React.useCallback(() => {
+    setMessages([]);
+  }, []);
+
+  useEscapeKey(callback);
 
   const closeToast = (id) => {
     const existingMessages = [...messages];

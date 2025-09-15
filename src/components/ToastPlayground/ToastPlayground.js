@@ -4,19 +4,13 @@ import styles from "./ToastPlayground.module.css";
 import ToastShelf from "../ToastShelf";
 import ToastContext from "../ToastProvider/ToastProvider";
 import { useContext } from "react";
-import useEscapeKey from "../../hooks/UseKey";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const { messages, addMessage, setMessages } = useContext(ToastContext);
+  const { messages, addMessage } = useContext(ToastContext);
   const [message, setMessage] = React.useState("");
   const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
-
-  const callback = React.useCallback(() => {
-    setMessages([]);
-  }, [setMessages]);
-  useEscapeKey(() => callback());
 
   const handleVariantChange = (e) => {
     setVariant(e.target.value);
